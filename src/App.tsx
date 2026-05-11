@@ -67,13 +67,14 @@ export default function App() {
   const [activeImage, setActiveImage] = useState<{ url: string, caption: string } | null>(null);
 
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const [galleryFilter, setGalleryFilter] = useState('All');
 
   const navLinks = [
     { name: 'About', href: '#about' },
     { name: 'Governance', href: '#governance' },
     { name: 'Sports', href: '#sports' },
     { name: 'Legacy', href: '#legacy' },
-    { name: 'Media', href: '#media' },
+    { name: 'Gallery', href: '#gallery' },
     { name: 'Contact', href: '#contact' },
   ];
 
@@ -90,8 +91,8 @@ export default function App() {
     },
     { 
       year: '2013', 
-      title: 'Cabinet Reorganization', 
-      desc: "Re-deployed to new portfolio during Governor Shema's cabinet reshuffle." 
+      title: 'Commissioner for Health', 
+      desc: "Re-deployed to lead the State Ministry of Health during Governor Shema's cabinet reshuffle, focusing on healthcare delivery and infrastructure." 
     },
     { 
       year: '~2020', 
@@ -133,15 +134,21 @@ export default function App() {
   ];
 
   const galleryImages = [
-    { url: 'https://placehold.co/800x600/F7F5F0/1C1917?text=Official+State+Function', caption: 'Presiding over a state governance event, 2024' },
-    { url: 'https://placehold.co/800x600/F7F5F0/1C1917?text=Fives+National+Championship', caption: 'Presenting the National Unity Cup, Sokoto 2025' },
-    { url: 'https://placehold.co/800x600/F7F5F0/1C1917?text=Cabinet+Meeting', caption: 'Collaborating with state officials at the Secretariat' },
-    { url: 'https://placehold.co/800x600/F7F5F0/1C1917?text=Youth+Engagement', caption: 'Addressing youth leaders during a sports summit' },
-    { url: 'https://placehold.co/800x600/F7F5F0/1C1917?text=Traditional+Ceremony', caption: 'Attending a cultural preservation event in Katsina' },
-    { url: 'https://placehold.co/800x600/F7F5F0/1C1917?text=Administrative+Session', caption: 'Working session at the Permanent Secretary office' },
-    { url: 'https://placehold.co/800x600/F7F5F0/1C1917?text=Sports+Association+Meeting', caption: 'Chairing the Katsina State Fives Association board' },
-    { url: 'https://placehold.co/800x600/F7F5F0/1C1917?text=Commemorative+Event', caption: 'Honoring the legacy of Ambassador Zakari Ibrahim' },
+    { url: 'https://lh3.googleusercontent.com/d/1P4-bcewXbvBe6iQo9cIIFxFBP5iivmVs', caption: 'Portrait of Talent and Dedication', category: 'Events' },
+    { url: 'https://lh3.googleusercontent.com/d/16P2gUYwV2Nx-VRTVSzpYLvjsVFmFYnyb', caption: 'Presenting the National Unity Cup, Sokoto 2025', category: 'Events' },
+    { url: 'https://lh3.googleusercontent.com/d/1pCmefoCbTPM8Ki_Ni77IGGXjEMl4zSx7', caption: 'Strategic Governance Meeting', category: 'Governance' },
+    { url: 'https://lh3.googleusercontent.com/d/1tiJKvAyLfKhSDnEm2tu9wMP2hYC9_94B', caption: 'Official Delegation and State Affairs', category: 'Governance' },
+    { url: 'https://lh3.googleusercontent.com/d/1oARLFsoDQcij5RsQE9Glrp1ZjSdnpWGP', caption: 'Youth and Sports Development Dialogue', category: 'Events' },
+    { url: 'https://lh3.googleusercontent.com/d/1qz-4xd-Od9j8x8_G0IhmBupwj-K4r-30', caption: 'Traditional Heritage Celebration', category: 'Events' },
+    { url: 'https://lh3.googleusercontent.com/d/1lM4_vo8nAmQHgOz6O_A1o3cZ_V8ESExE', caption: 'Official Administrative Portfolio', category: 'Governance' },
+    { url: 'https://lh3.googleusercontent.com/d/1G2xuOtYeX8KjiTXZVAugCjurRN0VDcZn', caption: 'Leadership and Community Engagement', category: 'Events' },
   ];
+
+  const filteredImages = galleryFilter === 'All' 
+    ? galleryImages 
+    : galleryImages.filter(img => img.category === galleryFilter);
+
+  const galleryCategories = ['All', 'Events', 'Speeches', 'Governance', 'Publications'];
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -243,7 +250,7 @@ export default function App() {
               <SectionHeading>A Life of Service</SectionHeading>
               <div className="space-y-6 text-stone-text leading-relaxed">
                 <p>
-                  Alhaji Mannir Ibrahim Talba is a seasoned public servant from Mashi Local Government, Katsina State, with decades of experience in governance and administration. A former Commissioner for Youth and Sports under Governor Ibrahim Shema, he was re-appointed as Permanent Secretary by Governor Dikko Radda in 2023 — a testament to his enduring competence and adaptability across political eras.
+                  Alhaji Mannir Ibrahim Talba is a seasoned public servant from Mashi Local Government, Katsina State, with decades of experience in governance and administration. A former Commissioner for Youth and Sports, and later Commissioner for Health under Governor Ibrahim Shema, he was re-appointed as Permanent Secretary by Governor Dikko Radda in 2023 — a testament to his enduring competence and adaptability across political eras.
                 </p>
                 <p>
                   A proud half-brother of the late Ambassador Zakari Y. Ibrahim, Talban Katsina (1944–2024), Mannir carries forward a family legacy of distinguished public service. He holds the prestigious <span className="text-terracotta font-semibold">mni</span> (Member of the National Institute) designation from the National Institute for Policy and Strategic Studies, Kuru.
@@ -387,28 +394,61 @@ export default function App() {
         </div>
       </section>
 
-      {/* Media Gallery */}
-      <section id="media" className="section-padding bg-white">
+      {/* Media Gallery Section */}
+      <section id="gallery" className="section-padding bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <SectionHeading centered>In Service</SectionHeading>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {galleryImages.map((img, idx) => (
-              <motion.div 
-                key={idx}
-                className="cursor-pointer group"
-                onClick={() => setActiveImage(img)}
+          <SectionHeading centered>Media Gallery</SectionHeading>
+          
+          {/* Gallery Filters */}
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            {galleryCategories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setGalleryFilter(cat)}
+                className={`px-6 py-2 text-[10px] uppercase tracking-widest border transition-all duration-300 ${
+                  galleryFilter === cat 
+                    ? 'bg-terracotta text-white border-terracotta' 
+                    : 'text-stone-text border-charcoal/10 hover:border-terracotta/40'
+                }`}
               >
-                <div className="aspect-[4/3] overflow-hidden bg-parchment mb-4 shadow-sm">
-                  <img 
-                    src={img.url} 
-                    alt={img.caption}
-                    className="w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0 group-hover:brightness-[1.05]"
-                  />
-                </div>
-                <p className="text-[10px] text-stone-text uppercase tracking-wider">{img.caption}</p>
-              </motion.div>
+                {cat}
+              </button>
             ))}
           </div>
+
+          <motion.div 
+            layout
+            className="grid grid-cols-2 md:grid-cols-4 gap-6"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredImages.map((img, idx) => (
+                <motion.div 
+                  key={img.url}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.4 }}
+                  className="cursor-pointer group"
+                  onClick={() => setActiveImage(img as any)}
+                >
+                  <div className="aspect-[4/3] overflow-hidden bg-parchment mb-4 shadow-sm relative">
+                    <img 
+                      src={img.url} 
+                      alt={img.caption}
+                      className="w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0 group-hover:brightness-[1.05]"
+                    />
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="text-[8px] bg-white/90 text-charcoal px-2 py-1 uppercase tracking-tighter">
+                        {img.category}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-stone-text uppercase tracking-wider">{img.caption}</p>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         </div>
       </section>
 
